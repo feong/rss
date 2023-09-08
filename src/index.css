@@ -31,3 +31,8 @@
 .article>p {
     margin-bottom: 0.5rem;
 }
+
+html,body {
+    height: 100%;
+    overflow: hidden;
+}
