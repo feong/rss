@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* h1, h2, h3, h4, h5, h6 { @apply text-slate-900 dark:text-white; } */
+    h1 { @apply text-2xl }
+    h2 { @apply text-xl }
+    h3 { @apply text-lg }
+}
+
+.optimize-list-row {
+    content-visibility: auto;
+}
+
+.article>h1 {
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.article>h2 {
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.article>h3 {
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.article>p {
+    margin-bottom: 0.5rem;
+}
