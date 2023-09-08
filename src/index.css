@@ -31,3 +31,9 @@
 .article>p {
     margin-bottom: 0.5rem;
 }
+
+body {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
