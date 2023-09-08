@@ -1,10 +1,6 @@
-import { useHistoryTravel, useLocalStorageState, useMount } from 'ahooks';
-import React, { PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { useLocalStorageState } from 'ahooks';
+import React, { PropsWithChildren, useContext } from 'react';
 import { readArticle } from '../utils/storage';
-
-const rootUrl = '/';
-const feedUrl = '/feed';
-const articleUrl = '/feed/article'
 
 const useStatus = () => {
   const [source, setSource] = useLocalStorageState<string>('source');
@@ -20,34 +16,25 @@ const useStatus = () => {
       defaultValue: false,
     },
   );
-  const [pathname, setPathname] = useState(window.location.pathname)
-
-  useMount(()=> {
-    window.onpopstate = (e) => { 
-       setPathname(window.location.pathname)
-    }
-  })
 
   return {
     source: source ?? '',
     setSource: (source: string) => {
       setSource(source);
-      window.history.pushState({}, source, feedUrl)
-      setPathname(feedUrl)
+      setViewColumnIndex(1);
     },
     guid,
     setGuid: (guid: string) => {
       setGuid(guid);
+      setViewColumnIndex(2);
       readArticle(guid);
-      window.history.pushState({}, guid, articleUrl)
-      setPathname(articleUrl)
     },
     back: () => {
-      window.history.back();
+      setViewColumnIndex((pre) => (pre ?? 1) - 1);
     },
-    sourceView: pathname === rootUrl,
-    feedView: pathname === feedUrl,
-    articleView: pathname === articleUrl,
+    sourceView: viewColumnIndex === 0,
+    feedView: viewColumnIndex === 1,
+    articleView: viewColumnIndex === 2,
     onlyUnread,
     setOnlyUnread,
   };
