@@ -1,5 +1,6 @@
-import { useRequest } from 'ahooks';
-import { useEffect } from 'react';
+import { useMount, useRequest } from 'ahooks';
+import dayjs from 'dayjs';
+import { useEffect, useRef } from 'react';
 import { useReadingStatusContext } from '../providers/ReadingStatusProvider';
 import {
   Article,
@@ -141,4 +142,29 @@ export const useCurrentSources = () => {
     sources: data,
     current: data.find((item) => item.source === source),
   };
+};
+
+export const useTouchHander = () => {
+  const start = useRef<number>();
+  const startAt = useRef(dayjs());
+  const { back } = useReadingStatusContext();
+  useMount(() => {
+    document.body.addEventListener('touchstart', (e) => {
+      start.current = e.targetTouches[0].pageX;
+      startAt.current = dayjs();
+    });
+    document.body.addEventListener('touchmove', (e) => {
+      if (start.current != null) {
+        const pageX = e.targetTouches[0].pageX;
+
+        if (
+          pageX - start.current > 50 &&
+          dayjs().diff(startAt.current) < 1000
+        ) {
+          start.current = undefined;
+          back();
+        }
+      }
+    });
+  });
 };

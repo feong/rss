@@ -6,6 +6,7 @@ import Feed from './pages/feed';
 import Source from './pages/source';
 import { useDarkModeContext } from './providers/GlobalSettingsProvider';
 import { useReadingStatusContext } from './providers/ReadingStatusProvider';
+import { useTouchHander } from './utils/hooks';
 
 const BackButton = () => {
   const { feedView, articleView, back } = useReadingStatusContext();
@@ -28,6 +29,7 @@ const BackButton = () => {
 function App() {
   const { darkMode } = useDarkModeContext();
   const { feedView, articleView } = useReadingStatusContext();
+  useTouchHander();
 
   //  1column  <->  md  <->  2columns  <->  xl  <-> 3columns
   const sourceCss = articleView
