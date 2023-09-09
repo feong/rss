@@ -1,6 +1,5 @@
 import { useMount, useRequest } from 'ahooks';
-import dayjs from 'dayjs';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReadingStatusContext } from '../providers/ReadingStatusProvider';
 import {
   Article,
@@ -145,26 +144,44 @@ export const useCurrentSources = () => {
 };
 
 export const useTouchHander = () => {
-  const start = useRef<number>();
-  const startAt = useRef(dayjs());
+  const maxDistance = 50;
   const { back } = useReadingStatusContext();
+
+  const lastX = useRef<number>();
+  const lastY = useRef<number>();
+  const [percent, setPercent] = useState(0);
+  const percentRef = useRef(percent);
+
   useMount(() => {
     document.body.addEventListener('touchstart', (e) => {
-      start.current = e.targetTouches[0].pageX;
-      startAt.current = dayjs();
+      setPercent(0);
+      percentRef.current = 0;
     });
     document.body.addEventListener('touchmove', (e) => {
-      if (start.current != null) {
-        const pageX = e.targetTouches[0].pageX;
+      const pageX = e.targetTouches[0].pageX;
+      const pageY = e.targetTouches[0].pageY;
 
-        if (
-          pageX - start.current > 50 &&
-          dayjs().diff(startAt.current) < 1000
-        ) {
-          start.current = undefined;
-          back();
-        }
+      const distanceX = pageX - (lastX.current ?? pageX);
+      const distanceY = Math.abs(pageY - (lastY.current ?? pageY));
+      lastX.current = pageX;
+      lastY.current = pageY;
+
+      if (Math.abs(distanceX) >= distanceY * 2) {
+        setPercent((pre) => {
+          const current = pre + Math.floor((distanceX * 100) / maxDistance);
+          const result = current >= 100 ? 100 : current <= 0 ? 0 : current;
+          percentRef.current = result;
+          return result;
+        });
       }
     });
+    document.body.addEventListener('touchend', (e) => {
+      if (percentRef.current >= 100) {
+        back();
+      }
+      setPercent(0);
+      percentRef.current = 0;
+    });
   });
+  return { percent };
 };
