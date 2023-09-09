@@ -1,4 +1,3 @@
-import { useKeyPress } from 'ahooks';
 import dayjs from 'dayjs';
 import { useEffect, useRef } from 'react';
 import Card from '../../components/card';
@@ -21,6 +20,9 @@ const ArticleContent = (props: Props) => {
       ref.current.innerHTML = content;
       cardRef.current?.focus();
     }
+    return () => {
+      cardRef.current?.blur();
+    };
   }, [content]);
 
   return (
@@ -43,11 +45,12 @@ const ArticleContent = (props: Props) => {
 
 const ArticlePage = () => {
   const article = useCurrentArticle();
+
   if (article == null) {
     return null;
   }
 
-  return article && <ArticleContent article={article} />;
+  return <ArticleContent article={article} />;
 };
 
 export default ArticlePage;

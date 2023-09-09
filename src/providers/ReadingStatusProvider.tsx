@@ -23,7 +23,7 @@ const useStatus = () => {
       setSource(source);
       setViewColumnIndex(1);
     },
-    guid,
+    guid: guid ?? '',
     setGuid: (guid: string) => {
       setGuid(guid);
       setViewColumnIndex(2);
@@ -31,6 +31,11 @@ const useStatus = () => {
     },
     back: () => {
       setViewColumnIndex((pre) => (pre ?? 1) - 1);
+      if(guid) {
+        setGuid(undefined)
+      } else if(source) {
+        setSource(undefined)
+      }
     },
     sourceView: viewColumnIndex === 0,
     feedView: viewColumnIndex === 1,

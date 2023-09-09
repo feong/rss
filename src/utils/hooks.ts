@@ -127,7 +127,7 @@ export const useRequestArticles = () => {
 };
 
 export const useCurrentArticle = () => {
-  const { guid = '' } = useReadingStatusContext();
+  const { guid } = useReadingStatusContext();
   return useArticle(guid);
 };
 
