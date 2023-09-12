@@ -5,6 +5,11 @@ import { readArticle } from '../utils/storage';
 const useStatus = () => {
   const [source, setSource] = useLocalStorageState<string>('source');
   const [guid, setGuid] = useLocalStorageState<string>('guid');
+  // 0: source column  1: feed column 2: article column
+  const [viewColumnIndex, setViewColumnIndex] = useLocalStorageState<number>(
+    'viewColumnIndex',
+    { defaultValue: 0 },
+  );
   const [onlyUnread, setOnlyUnread] = useLocalStorageState<boolean>(
     'onlyUnread',
     {
@@ -12,20 +17,20 @@ const useStatus = () => {
     },
   );
 
-  // 0: source column  1: feed column 2: article column
-  const viewColumnIndex = guid != null ? 2 : source != null ? 1 : 0;
-
   return {
     source: source ?? '',
     setSource: (source: string) => {
       setSource(source);
+      setViewColumnIndex(1);
     },
     guid: guid ?? '',
     setGuid: (guid: string) => {
       setGuid(guid);
+      setViewColumnIndex(2);
       readArticle(guid);
     },
     back: () => {
+      setViewColumnIndex((pre) => (pre ?? 1) - 1);
       if (guid) {
         setGuid(undefined);
       } else if (source) {

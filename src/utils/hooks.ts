@@ -150,7 +150,7 @@ export const useCurrentSources = () => {
   };
 };
 
-export const useTouchHander = () => {
+export const useTouchHandler = () => {
   const maxDistance = 50;
   const { back } = useReadingStatusContext();
 
@@ -161,12 +161,12 @@ export const useTouchHander = () => {
 
   useMount(() => {
     document.body.addEventListener('touchstart', (e) => {
+      lastX.current = e.targetTouches[0].pageX;
+      lastY.current = e.targetTouches[0].pageY;
       setPercent(0);
       percentRef.current = 0;
     });
     document.body.addEventListener('touchmove', (e) => {
-      if ((e as any)._isScroller) return;
-
       const pageX = e.targetTouches[0].pageX;
       const pageY = e.targetTouches[0].pageY;
 
@@ -175,7 +175,11 @@ export const useTouchHander = () => {
       lastX.current = pageX;
       lastY.current = pageY;
 
-      if (Math.abs(distanceX) >= distanceY * 2) {
+      if (
+        Math.abs(distanceX) >= distanceY * 3 &&
+        (document.getSelection() == null ||
+          document.getSelection()!.toString() === '')
+      ) {
         setPercent((pre) => {
           const current = pre + Math.floor((distanceX * 100) / maxDistance);
           const result = current >= 100 ? 100 : current <= 0 ? 0 : current;
@@ -185,11 +189,13 @@ export const useTouchHander = () => {
       }
     });
     document.body.addEventListener('touchend', (e) => {
-      if (percentRef.current >= 100) {
+      if (percentRef.current >= 90) {
         back();
       }
-      setPercent(0);
+      lastX.current = undefined;
+      lastY.current = undefined;
       percentRef.current = 0;
+      setPercent(0);
     });
   });
   return { percent };

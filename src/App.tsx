@@ -7,7 +7,7 @@ import Feed from './pages/feed';
 import Source from './pages/source';
 import { useDarkModeContext } from './providers/GlobalSettingsProvider';
 import { useReadingStatusContext } from './providers/ReadingStatusProvider';
-import { useTouchHander } from './utils/hooks';
+import { useTouchHandler } from './utils/hooks';
 
 const BackButton = () => {
   const { feedView, articleView, back } = useReadingStatusContext();
@@ -28,10 +28,10 @@ const BackButton = () => {
 };
 
 const BackTouchIndicate = React.memo(() => {
-  const { percent } = useTouchHander();
-  // console.log({ percent });
+  const { percent } = useTouchHandler();
+
   const opacity =
-    percent === 0
+    percent < 10
       ? 'opacity-0'
       : percent < 20
       ? 'opacity-10'
