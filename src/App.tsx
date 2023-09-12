@@ -52,7 +52,6 @@ const BackTouchIndicate = React.memo(() => {
       : percent < 100
       ? 'opacity-90'
       : 'opacity-100';
-  console.log({ opacity });
 
   return (
     <TbArrowBigLeftLinesFilled
@@ -77,6 +76,7 @@ function App() {
     ? 'w-full h-full '
     : 'hidden';
   const articleCss = articleView ? 'w-full h-full' : 'hidden';
+
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className="flex w-full h-screen overflow-hidden dark:bg-slate-950 text-slate-950 dark:text-white">

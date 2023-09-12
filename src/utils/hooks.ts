@@ -1,4 +1,4 @@
-import { useMount, useRequest } from 'ahooks';
+import { useMount, usePrevious, useRequest } from 'ahooks';
 import { useEffect, useRef, useState } from 'react';
 import { useReadingStatusContext } from '../providers/ReadingStatusProvider';
 import {
@@ -64,6 +64,10 @@ const getInfosFromContent = (content: string, link: string) => {
 };
 
 const queryArticles = async (url: string): Promise<Article[]> => {
+  if (url === '') {
+    return [];
+  }
+
   const response = await fetch(
     'https://api.apyhub.com/convert/rss-url/json?detailed=true',
     {
@@ -102,7 +106,9 @@ const queryArticles = async (url: string): Promise<Article[]> => {
 };
 
 export const useRequestArticles = () => {
-  const { source, onlyUnread, feedView } = useReadingStatusContext();
+  const { source, onlyUnread, feedView, sourceView } =
+    useReadingStatusContext();
+  const preSourceView = usePrevious(sourceView);
 
   const { loading, refresh } = useRequest(() => queryArticles(source), {
     cacheKey: source,
@@ -114,8 +120,9 @@ export const useRequestArticles = () => {
   const data = useArticles({ source, read: onlyUnread ? 0 : undefined });
 
   useEffect(() => {
-    feedView && refresh();
-  }, [feedView]);
+    // from source view to feed view
+    preSourceView && feedView && refresh();
+  }, [preSourceView, feedView]);
 
   const articles = data ?? [];
 
@@ -158,6 +165,8 @@ export const useTouchHander = () => {
       percentRef.current = 0;
     });
     document.body.addEventListener('touchmove', (e) => {
+      if ((e as any)._isScroller) return;
+
       const pageX = e.targetTouches[0].pageX;
       const pageY = e.targetTouches[0].pageY;
 
