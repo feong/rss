@@ -17,7 +17,8 @@ interface Content {
     authors?: { name: string }[];
     date_published: string;
     id: string;
-    summary: string;
+    summary?: string;
+    content_html?: string;
     title: string;
     url: string;
   }[];
@@ -86,7 +87,10 @@ const queryArticles = async (url: string): Promise<Article[]> => {
   }
   const data = (await response.json()) as Content;
   const articles = data.items.map((item) => {
-    const { content, thumbnail } = getInfosFromContent(item.summary, item.url);
+    const { content, thumbnail } = getInfosFromContent(
+      item.summary ?? item.content_html ?? '',
+      item.url,
+    );
     return {
       author: item.authors?.[0]?.name ?? '',
       content,
