@@ -9,7 +9,7 @@ const DarkMode = (props: Props) => {
 
   return (
     <div
-      className="cursor-pointer text-2xl relative w-6 h-6 -scale-y-[1] mt-1"
+      className="cursor-pointer text-2xl relative w-6 h-6 -scale-y-[1]"
       onClick={() => setDarkMode((pre) => !pre)}
     >
       <Transition

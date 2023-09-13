@@ -1,31 +1,12 @@
-import { useKeyPress } from 'ahooks';
 import React from 'react';
-import { TbArrowBigLeftLinesFilled, TbArrowLeft } from 'react-icons/tb';
-import IconButton from './components/button/IconButton';
+import { TbArrowBigLeftLinesFilled } from 'react-icons/tb';
+import Title from './components/title';
 import Article from './pages/article';
 import Feed from './pages/feed';
 import Source from './pages/source';
 import { useDarkModeContext } from './providers/GlobalSettingsProvider';
 import { useReadingStatusContext } from './providers/ReadingStatusProvider';
 import { useTouchHandler } from './utils/hooks';
-
-const BackButton = () => {
-  const { feedView, articleView, back } = useReadingStatusContext();
-
-  const backCss = articleView
-    ? 'fixed left-1 top-2 xl:hidden'
-    : feedView
-    ? 'fixed left-1 top-2 md:hidden'
-    : 'hidden';
-
-  useKeyPress('b', back);
-
-  return (
-    <IconButton onClick={back} className={backCss}>
-      <TbArrowLeft />
-    </IconButton>
-  );
-};
 
 const BackTouchIndicate = React.memo(() => {
   const { percent } = useTouchHandler();
@@ -79,7 +60,11 @@ function App() {
 
   return (
     <div className={darkMode ? 'dark' : ''}>
-      <div className="flex w-full h-screen overflow-hidden dark:bg-slate-950 text-slate-950 dark:text-white">
+      <div
+        id="container"
+        className="flex w-full h-screen bg-red-50 overflow-hidden dark:bg-slate-950 text-slate-950 dark:text-white"
+      >
+        <Title />
         <div className={sourceCss}>
           <Source />
         </div>
@@ -89,8 +74,6 @@ function App() {
         <div className={articleCss}>
           <Article />
         </div>
-
-        <BackButton />
         <BackTouchIndicate />
       </div>
     </div>

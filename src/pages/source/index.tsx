@@ -5,7 +5,6 @@ import Card from '../../components/card';
 import List from '../../components/list';
 import ModalForm from '../../components/modal';
 import { useReadingStatusContext } from '../../providers/ReadingStatusProvider';
-import DarkMode from './components/DarkMode';
 
 type Props = {};
 
@@ -31,13 +30,6 @@ const AddButton = () => {
 const Source = (props: Props) => {
   return (
     <div className=" h-full p-1 flex flex-col">
-      <div className="flex justify-between">
-        <h1>RSS</h1>
-        <div className="flex gap-2">
-          <AddButton />
-          <DarkMode />
-        </div>
-      </div>
       <Card className="!p-0 flex-auto scroll-y-overlay dark:[color-scheme:dark]">
         <List />
       </Card>

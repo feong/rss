@@ -50,7 +50,6 @@ const Feed = React.memo((props: Props) => {
   return (
     <div className=" h-full p-1 flex flex-col">
       <div className="flex justify-between items-start">
-        <h1 className={headerCss}>{current?.title}</h1>
         <div>
           <ReadAllButtonContainer />
           <IconButton
